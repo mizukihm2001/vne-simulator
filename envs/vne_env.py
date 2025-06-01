@@ -4,7 +4,6 @@ from typing import Any, Dict, Tuple
 
 import gymnasium as gym
 import numpy as np
-import networkx as nx
 from gymnasium import spaces
 
 from utils.substrate_generator import generate_substrate_network
