@@ -2,7 +2,7 @@
 
 import networkx as nx
 import numpy as np
-from typing import List, Tuple
+from typing import Tuple
 
 
 def generate_virtual_network_request(
