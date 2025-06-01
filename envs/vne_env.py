@@ -7,6 +7,7 @@ import numpy as np
 from gymnasium import spaces
 
 from utils.substrate_generator import generate_substrate_network
+from utils.vnr_generator import generate_virtual_network_request
 
 
 class VNEEnv(gym.Env):
@@ -26,6 +27,7 @@ class VNEEnv(gym.Env):
 
         self.state = None
         self.substrate = None  # ← SNを保持
+        self.vnr = None  # ← VNRを保持する属性を追加
 
     def reset(
         self,
@@ -36,9 +38,11 @@ class VNEEnv(gym.Env):
 
         # Substrateネットワークを生成
         self.substrate = generate_substrate_network()
+        self.vnr = generate_virtual_network_request()  # ← ここでVNR生成
 
         self.state = np.random.rand(10).astype(np.float32)
-        info = {"reset_info": "Substrate generated"}
+
+        info = {"reset_info": "Substrate and VNR generated"}
         return self.state, info
 
     def step(
@@ -63,6 +67,13 @@ class VNEEnv(gym.Env):
 
         print("Node CPU capacities:")
         for node, data in self.substrate.nodes(data=True):
+            print(f"  Node {node}: CPU={data['cpu']}")
+
+        print("\nVNR overview:")
+        print(f"- Nodes: {self.vnr.number_of_nodes()}")
+        print(f"- Edges: {self.vnr.number_of_edges()}")
+        print("Node CPU demands:")
+        for node, data in self.vnr.nodes(data=True):
             print(f"  Node {node}: CPU={data['cpu']}")
 
     def close(self) -> None:
