@@ -8,6 +8,8 @@ from gymnasium import spaces
 
 from utils.substrate_generator import generate_substrate_network
 from utils.vnr_generator import generate_virtual_network_request
+# 追加インポート
+from agents.random_embedder import RandomEmbedder
 
 
 class VNEEnv(gym.Env):
@@ -28,6 +30,7 @@ class VNEEnv(gym.Env):
         self.state = None
         self.substrate = None  # ← SNを保持
         self.vnr = None  # ← VNRを保持する属性を追加
+        self.embedder = RandomEmbedder()  # ← 埋め込み器を環境に組み込む
 
     def reset(
         self,
@@ -49,13 +52,23 @@ class VNEEnv(gym.Env):
         self,
         action: int,
     ) -> Tuple[np.ndarray, float, bool, bool, Dict[str, Any]]:
-        reward = float(np.random.rand())
+        # 埋め込み実行
+        success, node_mapping, link_paths = self.embedder.embed(
+            self.substrate, self.vnr
+        )
+
+        # 簡易な報酬設計：成功 +1.0 / 失敗 -1.0
+        reward = 1.0 if success else -1.0
         terminated = False
         truncated = False
 
+        # 状態更新（とりあえずランダム継続）
         self.state = np.random.rand(10).astype(np.float32)
+
         info = {
-            "step_info": f"Dummy step with action {action}",
+            "success": success,
+            "node_mapping": node_mapping,
+            "link_paths": link_paths,
         }
 
         return self.state, reward, terminated, truncated, info
