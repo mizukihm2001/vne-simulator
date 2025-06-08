@@ -39,9 +39,12 @@ class VNEEnv(gym.Env):
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
         super().reset(seed=seed)
 
-        # Substrateネットワークを生成
-        self.substrate = generate_substrate_network()
-        self.vnr = generate_virtual_network_request()  # ← ここでVNR生成
+        # YAMLから取得したパラメータで生成
+        sn_config = self.config["substrate"]
+        vnr_config = self.config["vnr"]
+
+        self.substrate = generate_substrate_network(sn_config)
+        self.vnr = generate_virtual_network_request(vnr_config)
 
         self.state = np.random.rand(10).astype(np.float32)
 

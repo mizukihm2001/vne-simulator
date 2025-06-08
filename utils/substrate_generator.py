@@ -2,27 +2,14 @@
 
 import networkx as nx
 import numpy as np
-from typing import Tuple
 
 
-def generate_substrate_network(
-    num_nodes: int = 10,
-    edge_prob: float = 0.3,
-    cpu_range: Tuple[int, int] = (50, 100),
-    bandwidth_range: Tuple[int, int] = (50, 100),
-) -> nx.Graph:
-    """
-    Generate a substrate network graph with CPU and bandwidth attributes.
+def generate_substrate_network(config: dict) -> nx.Graph:
+    num_nodes = config["num_nodes"]
+    edge_prob = config["edge_prob"]
+    cpu_range = tuple(config["cpu_range"])
+    bandwidth_range = tuple(config["bandwidth_range"])
 
-    Args:
-        num_nodes: Number of substrate nodes
-        edge_prob: Probability of edge creation (for random graph)
-        cpu_range: Range of CPU resources per node
-        bandwidth_range: Range of bandwidth per link
-
-    Returns:
-        A NetworkX graph with node and edge attributes
-    """
     G = nx.erdos_renyi_graph(n=num_nodes, p=edge_prob, seed=42)
 
     for node in G.nodes:
