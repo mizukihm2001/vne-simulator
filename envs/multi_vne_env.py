@@ -1,10 +1,9 @@
 # envs/multi_vne_env.py
 
-from typing import Any, Dict, Tuple, List
+from typing import Any, Dict, List
 import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
-from copy import deepcopy
 
 from utils.substrate_generator import generate_substrate_network
 from utils.vnr_generator import generate_virtual_network_request
@@ -38,7 +37,10 @@ class MultiVNEEnv(gym.Env):
         episodes = self.config["experiment"]["episodes"]
 
         self.substrate = generate_substrate_network(sn_config)
-        self.vnr_queue = [generate_virtual_network_request(vnr_config) for _ in range(episodes)]
+        self.vnr_queue = [
+            generate_virtual_network_request(vnr_config)
+            for _ in range(episodes)
+        ]
         self.current_vnr = self.vnr_queue.pop(0)
         self.current_step = 0
 
@@ -47,7 +49,9 @@ class MultiVNEEnv(gym.Env):
         return self.state, info
 
     def step(self, action: int):
-        success, node_map, link_paths = self.embedder.embed(self.substrate, self.current_vnr)
+        success, node_map, link_paths = self.embedder.embed(
+            self.substrate, self.current_vnr
+        )
 
         reward = 1.0 if success else -1.0
         done = len(self.vnr_queue) == 0
@@ -69,7 +73,9 @@ class MultiVNEEnv(gym.Env):
         return self.state, reward, done, truncated, info
 
     def render(self) -> None:
-        print(f"Step: {self.current_step}, Remaining VNRs: {len(self.vnr_queue)}")
+        print(
+            f"Step: {self.current_step}, Remaining VNRs: {len(self.vnr_queue)}"
+        )
 
     def close(self) -> None:
         pass
