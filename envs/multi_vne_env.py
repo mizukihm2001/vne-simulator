@@ -7,6 +7,7 @@ from gymnasium import spaces
 
 from utils.substrate_generator import generate_substrate_network
 from utils.vnr_generator import generate_virtual_network_request
+from utils.evaluator import apply_embedding
 from agents.random_embedder import RandomEmbedder
 
 
@@ -53,7 +54,14 @@ class MultiVNEEnv(gym.Env):
             self.substrate, self.current_vnr
         )
 
-        reward = 1.0 if success else -1.0
+        if success:
+            apply_embedding(
+                self.substrate, self.current_vnr, node_map, link_paths
+            )
+            reward = 1.0
+        else:
+            reward = -1.0
+
         done = len(self.vnr_queue) == 0
         truncated = False
 
