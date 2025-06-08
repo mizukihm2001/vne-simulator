@@ -12,7 +12,7 @@ from utils.vnr_generator import generate_virtual_network_request
 from agents.random_embedder import RandomEmbedder
 
 
-class VNEEnv(gym.Env):
+class SingleVNEEnv(gym.Env):
     """
     Virtual Network Embedding Environment (Gymnasium-compatible).
     """
