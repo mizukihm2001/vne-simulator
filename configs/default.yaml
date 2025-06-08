@@ -1,0 +1,17 @@
+substrate:
+  num_nodes: 10
+  edge_prob: 0.3
+  cpu_range: [50, 100]
+  bandwidth_range: [50, 100]
+
+vnr:
+  num_nodes: 3
+  edge_prob: 0.5
+  cpu_range: [10, 30]
+  bandwidth_range: [10, 30]
+
+embedder: random
+
+experiment:
+  seed: 42
+  episodes: 1
