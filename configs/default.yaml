@@ -1,19 +1,19 @@
 substrate:
-  num_nodes: 10
-  edge_prob: 0.3
-  cpu_range: [50, 100]
-  bandwidth_range: [50, 100]
+  num_nodes: 8               # ↓ ノード数減少でリソース競合を誘発
+  edge_prob: 0.25            # ↓ 少しスパースに
+  cpu_range: [40, 80]        # ↓ 全体的に少なめのCPU容量
+  bandwidth_range: [30, 60]  # ↓ 帯域もやや狭く設定
 
 vnr:
-  num_nodes: 3
-  edge_prob: 0.5
-  cpu_range: [10, 30]
-  bandwidth_range: [10, 30]
-  duration_range: [5, 10]
+  num_nodes: 4               # ↑ より大きなVNRを要求
+  edge_prob: 0.6             # ↑ 複雑なトポロジー
+  cpu_range: [25, 40]        # ↑ リソース要求を強めに
+  bandwidth_range: [20, 40]  # ↑ 同上
+  duration_range: [5, 10]    # → 寿命は現状維持
 
 experiment:
-  embedder: "random"      # ← "first_fit" や "greedy" に切り替え可能
+  embedder: "first_fit"      # ← 手法はそのままでOK（調整可能）
   episodes: 20
-  arrival_rate: 1.0
+  arrival_rate: 1.8          # ↑ 到着頻度を上げてリソース枯渇を加速
   seed: 42
   max_steps: 30
