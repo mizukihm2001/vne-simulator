@@ -7,3 +7,6 @@ __pycache__/
 
 # Jupyter Notebook チェックポイント（使ってる場合）
 *.ipynb_checkpoints
+
+# Logs
+logs/
