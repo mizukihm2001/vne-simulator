@@ -1,7 +1,7 @@
 # agents/random_embedder.py
 
 import random
-from typing import Tuple, Dict
+from typing import Tuple, Dict, List
 import networkx as nx
 
 from agents.base_embedder import BaseEmbedder
@@ -9,14 +9,14 @@ from agents.base_embedder import BaseEmbedder
 
 class RandomEmbedder(BaseEmbedder):
     """
-    Random Node & Link Mapping Embedder.
+    Random Node & Link Mapping Embedder with pre-check.
     """
 
     def embed(
         self,
         substrate: nx.Graph,
         vnr: nx.Graph,
-    ) -> Tuple[bool, Dict[int, int], Dict[Tuple[int, int], list]]:
+    ) -> Tuple[bool, Dict[int, int], Dict[Tuple[int, int], List[int]]]:
         node_mapping = {}
         used_snodes = set()
 
@@ -46,7 +46,7 @@ class RandomEmbedder(BaseEmbedder):
             sn_v = node_mapping[v]
             bw_demand = vnr.edges[u, v]["bandwidth"]
 
-            # 帯域条件を満たすエッジのみのサブグラフを作る
+            # 帯域条件を満たすエッジのみのサブグラフで経路探索
             G_sub = nx.Graph()
             for x, y, data in substrate.edges(data=True):
                 if data["bandwidth"] >= bw_demand:
@@ -57,5 +57,13 @@ class RandomEmbedder(BaseEmbedder):
                 link_paths[(u, v)] = path
             except nx.NetworkXNoPath:
                 return False, {}, {}
+
+        # --- 追加：リンク資源のチェック（事前検証） ---
+        for (u, v), path in link_paths.items():
+            bw_demand = vnr.edges[u, v]["bandwidth"]
+            for i in range(len(path) - 1):
+                u_, v_ = path[i], path[i + 1]
+                if substrate.edges[u_, v_]["bandwidth"] < bw_demand:
+                    return False, {}, {}
 
         return True, node_mapping, link_paths
