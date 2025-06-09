@@ -17,6 +17,7 @@
     "github.copilot",
     "github.copilot-chat",
     "mikestead.dotenv",
-    "ms-ceintl.vscode-language-pack-ja"
+    "ms-ceintl.vscode-language-pack-ja",
+    "mechatroner.rainbow-csv"
   ]
 }
