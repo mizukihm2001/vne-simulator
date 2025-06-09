@@ -9,10 +9,10 @@ import networkx as nx
 import numpy as np
 from gymnasium import spaces
 
-from agents.random_embedder import RandomEmbedder
 from utils.evaluator import apply_embedding
 from utils.substrate_generator import generate_substrate_network
 from utils.vnr_generator import generate_virtual_network_request
+from utils.embedder_factory import get_embedder
 
 
 class PoissonVNEEnv(gym.Env):
@@ -23,9 +23,11 @@ class PoissonVNEEnv(gym.Env):
     def __init__(self, config: Dict[str, Any]):
         super().__init__()
         self.config = config
-        self.embedder = RandomEmbedder()
-        self.substrate: nx.Graph = None
 
+        embedder_name = config["experiment"].get("embedder", "random")
+        self.embedder = get_embedder(embedder_name)
+
+        self.substrate: nx.Graph = None
         self.active_vnrs = []
         self.event_queue = []
         self.current_time = 0

@@ -9,9 +9,11 @@ vnr:
   edge_prob: 0.5
   cpu_range: [10, 30]
   bandwidth_range: [10, 30]
-
-embedder: random
+  duration_range: [5, 10]
 
 experiment:
+  embedder: "random"      # ← "first_fit" や "greedy" に切り替え可能
+  episodes: 20
+  arrival_rate: 1.0
   seed: 42
-  episodes: 3
+  max_steps: 30
