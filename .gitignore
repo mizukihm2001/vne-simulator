@@ -1,5 +1,9 @@
-venvs/
+# 仮想環境（プロジェクト直下）
+.venv/
+
+# Pythonキャッシュ
 __pycache__/
 *.pyc
-*.ipynb_checkpoints
 
+# Jupyter Notebook チェックポイント（使ってる場合）
+*.ipynb_checkpoints
