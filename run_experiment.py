@@ -1,11 +1,12 @@
 # run_experiment.py
 
 import argparse
+
 from envs.poisson_vne_env import PoissonVNEEnv
 from utils.config_loader import load_config
 
 
-def run(config_path: str):
+def run(config_path: str) -> None:
     config = load_config(config_path)
     env = PoissonVNEEnv(config)
 
@@ -23,13 +24,14 @@ def run(config_path: str):
 
         print(f"\n[Step {step}]")
         print(f"  Reward: {reward:.1f}")
+
         if info.get("success") is True:
             success_count += 1
-            print(f"  ✅ Success: {info['success']}")
+            print("  ✅ Success")
             print(f"  Node mapping: {info['node_mapping']}")
             print(f"  Link paths: {info['link_paths']}")
         elif info.get("success") is False:
-            print(f"  ❌ Failed to embed VNR.")
+            print("  ❌ Failed to embed VNR.")
         else:
             print("  No VNR arrived this step.")
 
@@ -44,7 +46,10 @@ def run(config_path: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run VNE experiment.")
     parser.add_argument(
-        "--config", type=str, default="configs/default.yaml", help="Path to config file"
+        "--config",
+        type=str,
+        default="configs/default.yaml",
+        help="Path to config file",
     )
     args = parser.parse_args()
     run(args.config)
