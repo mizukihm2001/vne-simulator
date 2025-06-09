@@ -52,11 +52,15 @@ class RandomEmbedder(BaseEmbedder):
                 if data["bandwidth"] >= bw_demand:
                     G_sub.add_edge(x, y)
 
-            try:
-                path = nx.shortest_path(G_sub, source=sn_u, target=sn_v)
-                link_paths[(u, v)] = path
-            except nx.NetworkXNoPath:
+        try:
+            # 追加チェック：sn_u / sn_v が G_sub に存在するか
+            if sn_u not in G_sub or sn_v not in G_sub:
                 return False, {}, {}
+
+            path = nx.shortest_path(G_sub, source=sn_u, target=sn_v)
+            link_paths[(u, v)] = path
+        except nx.NetworkXNoPath:
+            return False, {}, {}
 
         # --- 追加：リンク資源のチェック（事前検証） ---
         for (u, v), path in link_paths.items():
