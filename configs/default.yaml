@@ -14,4 +14,4 @@ embedder: random
 
 experiment:
   seed: 42
-  episodes: 1
+  episodes: 3
