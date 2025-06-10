@@ -9,12 +9,17 @@ import pandas as pd
 from envs.poisson_vne_env import PoissonVNEEnv
 from utils.config_loader import load_config
 from utils.seed import set_seed
+from utils.embedder_factory import get_embedder
 
 
 def run_single_experiment(config: dict, run_id: int = 0) -> dict:
     seed = config["experiment"].get("seed", 42) + run_id
     set_seed(seed)
     config["experiment"]["seed"] = seed
+
+    embedder_name = config["experiment"].get("embedder", "first_fit")
+    embedder = get_embedder(embedder_name)
+    config["embedder"] = embedder  # PoissonVNEEnv に渡す
 
     env = PoissonVNEEnv(copy.deepcopy(config))
     obs, info = env.reset()
